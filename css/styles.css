@@ -443,6 +443,29 @@ html, body {
   flex-shrink: 0;
 }
 
+/* Barras en estado crítico (≤20%) */
+.stat-bar.critico::-webkit-progress-value { background: var(--color-bar-critical) !important; }
+.stat-bar.critico::-moz-progress-bar      { background: var(--color-bar-critical) !important; }
+.stat-bar.critico { animation: pulseRed var(--anim-pulse-duration) ease-in-out infinite; }
+.stat-value.critico { color: var(--color-bar-critical); }
+
+/* Barras en advertencia (≤70%) */
+.stat-bar.advertencia::-webkit-progress-value { background: #FFB300 !important; }
+.stat-bar.advertencia::-moz-progress-bar      { background: #FFB300 !important; }
+.stat-value.advertencia { color: #FFB300; }
+
+@keyframes pulseRed {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+
+/* Botones en cooldown */
+.btn-cooldown {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
 /* ──────────────────────────────────────────────
    BOTONES DE ACCIÓN
 ────────────────────────────────────────────── */
