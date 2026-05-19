@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Luffy-gotchi 🏴‍☠️</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <main class="console-body" role="main">
+
+    <!-- ==============================
+         PANTALLA DE ADOPCIÓN
+    ============================== -->
+    <section id="screen-adoption" class="screen active" aria-label="Pantalla de adopción">
+      <div class="screen-display">
+        <h1 class="game-title">LUFFY-GOTCHI</h1>
+        <div class="sprite-container" aria-hidden="true">
+          <div id="sprite-adoption" class="luffy-sprite"></div>
+        </div>
+        <p class="adoption-subtitle">¡Adopta tu nakama!</p>
+        <form id="form-adoption" novalidate>
+          <label for="input-pirate-name" class="form-label">Nombre del tripulante:</label>
+          <input
+            type="text"
+            id="input-pirate-name"
+            class="pirate-input"
+            maxlength="10"
+            placeholder="Ej: Luffy"
+            autocomplete="off"
+            aria-required="true"
+          />
+          <p id="adoption-error" class="error-message hidden" role="alert">¡El nombre no puede estar vacío!</p>
+          <button type="submit" id="btn-adopt" class="console-btn btn-primary">
+            ⚓ ¡Zarpar!
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- ==============================
+         PANTALLA PRINCIPAL
+    ============================== -->
+    <section id="screen-main" class="screen hidden" aria-label="Pantalla principal del juego">
+      <div class="screen-display">
+
+        <header class="game-header">
+          <span id="display-pet-name" class="pet-name" aria-label="Nombre de la mascota">---</span>
+          <span id="display-day" class="pet-day" aria-label="Día">DÍA 1</span>
+        </header>
+
+        <div class="sprite-wrapper">
+          <div id="speech-bubble" class="speech-bubble hidden" role="status" aria-live="polite"></div>
+          <div id="luffy-sprite" class="luffy-sprite" data-state="idle" aria-label="Sprite de Luffy"></div>
+        </div>
+
+        <div class="stats-panel" aria-label="Estadísticas de la mascota">
+          <div class="stat-row">
+            <span class="stat-icon" title="Hambre">🍖</span>
+            <label for="bar-hunger" class="sr-only">Hambre</label>
+            <progress id="bar-hunger" class="stat-bar bar-hunger" max="100" value="80"></progress>
+            <span id="text-hunger" class="stat-value" aria-live="polite">80%</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-icon" title="Energía">⚡</span>
+            <label for="bar-energy" class="sr-only">Energía</label>
+            <progress id="bar-energy" class="stat-bar bar-energy" max="100" value="80"></progress>
+            <span id="text-energy" class="stat-value" aria-live="polite">80%</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-icon" title="Felicidad">😄</span>
+            <label for="bar-happiness" class="sr-only">Felicidad</label>
+            <progress id="bar-happiness" class="stat-bar bar-happiness" max="100" value="80"></progress>
+            <span id="text-happiness" class="stat-value" aria-live="polite">80%</span>
+          </div>
+        </div>
+
+        <div class="buttons-panel" role="group" aria-label="Acciones">
+          <button id="btn-feed"  class="console-btn btn-action" aria-label="Dar de comer">🍖 Comer</button>
+          <button id="btn-play"  class="console-btn btn-action" aria-label="Jugar">⚔️ Luchar</button>
+          <button id="btn-sleep" class="console-btn btn-action" aria-label="Dormir">💤 Dormir</button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==============================
+         PANTALLA MINIJUEGO (Piedra, Papel, Tijeras)
+    ============================== -->
+    <section id="screen-minigame" class="screen hidden" aria-label="Minijuego">
+      <div class="screen-display">
+        <h2 class="minigame-title">¡BATALLA!</h2>
+        <p class="minigame-subtitle">Elige tu ataque:</p>
+        <div class="minigame-choices">
+          <button class="minigame-btn" data-choice="piedra"  aria-label="Piedra">✊</button>
+          <button class="minigame-btn" data-choice="papel"   aria-label="Papel">✋</button>
+          <button class="minigame-btn" data-choice="tijeras" aria-label="Tijeras">✌️</button>
+        </div>
+        <div id="minigame-result" class="minigame-result hidden" role="status" aria-live="polite">
+          <p id="minigame-result-text"></p>
+          <button id="btn-minigame-back" class="console-btn btn-secondary">Volver</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==============================
+         PANTALLA GAME OVER
+    ============================== -->
+    <section id="screen-gameover" class="screen hidden" aria-label="Pantalla de fin de juego">
+      <div class="screen-display">
+        <h2 class="gameover-title">GAME OVER</h2>
+        <div class="sprite-container" aria-hidden="true">
+          <div id="sprite-gameover" class="luffy-sprite" data-state="dead"></div>
+        </div>
+        <p id="gameover-message" class="gameover-message" role="alert"></p>
+        <button id="btn-restart" class="console-btn btn-primary">🔄 Nuevo Nakama</button>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
