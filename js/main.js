@@ -41,6 +41,7 @@ const THRESHOLD_FULL      = 85;   // hambre ≥ esto → saciado
 // Temporización
 const LOOP_INTERVAL_MS    = 4000; // tick cada 4 segundos
 const BUBBLE_DURATION_MS  = 2500; // burbuja visible 2.5s
+const BUTTON_COOLDOWN_MS  = 1000; // evita spam de botones
 
 // Persistencia
 const STORAGE_KEY         = 'luffy_gotchi_save';
@@ -228,8 +229,10 @@ let mascota = {
   diaNacimiento:    null,
 };
 
-let gameLoopId      = null;
-let bubbleTimeoutId = null;
+let gameLoopId        = null;
+let bubbleTimeoutId   = null;
+let buttonCooldownId  = null;
+let botonesEnCooldown = false;
 
 /* ──────────────────────────────────────────────
    REFERENCIAS AL DOM
@@ -338,6 +341,24 @@ function actualizarBarrasDOM() {
   textoHambre.textContent    = `${Math.round(mascota.hambre)}%`;
   textoEnergia.textContent   = `${Math.round(mascota.energia)}%`;
   textoFelicidad.textContent = `${Math.round(mascota.felicidad)}%`;
+
+  aplicarColorCritico(barHambre,    textoHambre,    mascota.hambre);
+  aplicarColorCritico(barEnergia,   textoEnergia,   mascota.energia);
+  aplicarColorCritico(barFelicidad, textoFelicidad, mascota.felicidad);
+}
+
+/** Aplica clase CSS 'critico' o 'advertencia' según el valor de la stat */
+function aplicarColorCritico(barra, texto, valor) {
+  barra.classList.remove('critico', 'advertencia');
+  texto.classList.remove('critico', 'advertencia');
+
+  if (valor <= THRESHOLD_CRITICAL) {
+    barra.classList.add('critico');
+    texto.classList.add('critico');
+  } else if (valor <= THRESHOLD_HAPPY) {
+    barra.classList.add('advertencia');
+    texto.classList.add('advertencia');
+  }
 }
 
 function actualizarCabeceraDOM() {
@@ -368,8 +389,18 @@ function modificarStat(stat, delta) {
    ACCIONES DEL JUGADOR
 ────────────────────────────────────────────── */
 
+function activarCooldownBotones() {
+  botonesEnCooldown = true;
+  [btnAlimentar, btnJugar, btnDormir].forEach(btn => btn.classList.add('btn-cooldown'));
+  if (buttonCooldownId) clearTimeout(buttonCooldownId);
+  buttonCooldownId = setTimeout(() => {
+    botonesEnCooldown = false;
+    [btnAlimentar, btnJugar, btnDormir].forEach(btn => btn.classList.remove('btn-cooldown'));
+  }, BUTTON_COOLDOWN_MS);
+}
+
 function alimentar() {
-  if (!mascota.viva) return;
+  if (!mascota.viva || botonesEnCooldown) return;
 
   if (mascota.hambre >= STAT_MAX) {
     mostrarBurbuja(obtenerFraseAleatoria('toofull'));
@@ -380,13 +411,14 @@ function alimentar() {
   modificarStat('felicidad', GAIN_HAPPINESS_FEED);
   modificarStat('energia',   -COST_ENERGY_FEED);
 
+  activarCooldownBotones();
   mostrarBurbuja(obtenerFraseAleatoria('feed'));
   actualizarDOM();
   guardarEnStorage();
 }
 
 function abrirMinijuego() {
-  if (!mascota.viva) return;
+  if (!mascota.viva || botonesEnCooldown) return;
 
   if (mascota.energia <= THRESHOLD_CRITICAL) {
     mostrarBurbuja(obtenerFraseAleatoria('tired_play'));
@@ -398,7 +430,7 @@ function abrirMinijuego() {
 }
 
 function dormir() {
-  if (!mascota.viva) return;
+  if (!mascota.viva || botonesEnCooldown) return;
 
   if (mascota.energia >= STAT_MAX) {
     mostrarBurbuja(obtenerFraseAleatoria('already_max_energy'));
@@ -408,6 +440,7 @@ function dormir() {
   modificarStat('energia',   GAIN_ENERGY_SLEEP);
   modificarStat('felicidad', -COST_HAPPINESS_SLEEP);
 
+  activarCooldownBotones();
   mostrarBurbuja(obtenerFraseAleatoria('sleep'));
   actualizarDOM();
   guardarEnStorage();
