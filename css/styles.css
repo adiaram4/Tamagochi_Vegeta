@@ -602,6 +602,212 @@ html, body {
 }
 
 /* ──────────────────────────────────────────────
+   SELECCIÓN DE MINIJUEGO
+────────────────────────────────────────────── */
+.mg-select-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-sm);
+  width: 100%;
+  padding: var(--space-sm) 0;
+}
+
+.mg-select-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  background: var(--color-ocean);
+  border: 2px solid var(--color-screen-border);
+  border-radius: 10px;
+  padding: var(--space-sm);
+  cursor: pointer;
+  transition: transform 0.15s, background 0.15s;
+  box-shadow: 0 4px 0 #0D1F3C;
+}
+
+.mg-select-btn:hover  { background: #2A4A9A; transform: translateY(-2px); }
+.mg-select-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #0D1F3C; }
+
+.mg-select-icon { font-size: 1.8rem; }
+.mg-select-label {
+  font-family: var(--font-pixel);
+  font-size: 0.35rem;
+  color: var(--color-text-main);
+  text-align: center;
+}
+
+/* ──────────────────────────────────────────────
+   MINIJUEGO: ESQUIVA LA TORMENTA
+────────────────────────────────────────────── */
+.tormenta-hud {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0 var(--space-xs);
+  margin-bottom: var(--space-xs);
+}
+
+.tormenta-vidas { font-size: 0.7rem; }
+
+.tormenta-timer {
+  font-family: var(--font-pixel);
+  font-size: 0.5rem;
+  color: var(--color-gold);
+}
+
+.tormenta-area {
+  width: 100%;
+  height: 180px;
+  background: linear-gradient(180deg, #0D2A5A 0%, #1A3A6E 50%, #0D4A3A 100%);
+  border: 2px solid var(--color-screen-border);
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+  cursor: none;
+}
+
+.tormenta-barco {
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.6rem;
+  transition: top 0.05s linear;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.tormenta-obstaculo {
+  position: absolute;
+  font-size: 1.4rem;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.tormenta-instruccion {
+  font-size: 0.35rem;
+  color: var(--color-text-dim);
+  text-align: center;
+  margin-top: var(--space-xs);
+}
+
+/* ──────────────────────────────────────────────
+   MINIJUEGO: GOMU GOMU SNIPER
+────────────────────────────────────────────── */
+.sniper-container {
+  width: 100%;
+  position: relative;
+  margin: var(--space-sm) 0;
+}
+
+.sniper-barra-wrap {
+  display: flex;
+  width: 100%;
+  height: 40px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 2px solid var(--color-screen-border);
+}
+
+.sniper-zona {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-pixel);
+  font-size: 0.3rem;
+  color: white;
+  font-weight: bold;
+}
+
+#sniper-zona-miss  { background: #555566; }
+#sniper-zona-bueno { background: #1E6AB0; }
+#sniper-zona-bien  { background: #1A9A50; }
+#sniper-zona-gomu  { background: var(--color-primary); }
+
+.sniper-aguja {
+  position: absolute;
+  top: -4px;
+  left: 0%;
+  width: 4px;
+  height: 48px;
+  background: var(--color-gold);
+  border-radius: 2px;
+  box-shadow: 0 0 8px var(--color-gold);
+  transition: none;
+}
+
+.sniper-puntos {
+  font-size: 0.45rem;
+  color: var(--color-gold);
+  text-align: center;
+}
+
+.sniper-disparos {
+  font-size: 0.4rem;
+  color: var(--color-text-dim);
+  text-align: center;
+  margin-bottom: var(--space-sm);
+}
+
+/* ──────────────────────────────────────────────
+   MINIJUEGO: MAPA DEL TESORO
+────────────────────────────────────────────── */
+.tesoro-pista {
+  font-size: 0.4rem;
+  color: var(--color-gold);
+  text-align: center;
+  min-height: 24px;
+  margin: var(--space-xs) 0;
+  line-height: 1.8;
+}
+
+.tesoro-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  width: 100%;
+  padding: var(--space-xs) 0;
+}
+
+.tesoro-celda {
+  aspect-ratio: 1;
+  background: var(--color-ocean);
+  border: 2px solid var(--color-screen-border);
+  border-radius: 6px;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.1s, background 0.2s;
+  box-shadow: 0 3px 0 #0D1F3C;
+}
+
+.tesoro-celda:hover:not(.tesoro-celda--abierta) {
+  background: #2A4A9A;
+  transform: translateY(-1px);
+}
+
+.tesoro-celda--abierta {
+  cursor: default;
+  background: rgba(0,0,0,0.3);
+  box-shadow: none;
+  transform: none;
+}
+
+.tesoro-celda--ganadora { background: rgba(255,215,0,0.3); border-color: var(--color-gold); }
+.tesoro-celda--trampa   { background: rgba(204,17,17,0.3); border-color: var(--color-primary); }
+
+.tesoro-intentos {
+  font-size: 0.4rem;
+  color: var(--color-text-dim);
+  text-align: center;
+  margin-top: var(--space-xs);
+}
+
+/* ──────────────────────────────────────────────
    RESPONSIVE — pantallas pequeñas
 ────────────────────────────────────────────── */
 @media (max-width: 380px) {

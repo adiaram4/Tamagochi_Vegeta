@@ -421,14 +421,27 @@ function alimentar() {
 
 function abrirMinijuego() {
   if (!mascota.viva || botonesEnCooldown) return;
-
   if (mascota.energia <= THRESHOLD_CRITICAL) {
     mostrarBurbuja(obtenerFraseAleatoria('tired_play'));
     return;
   }
+  mostrarPantalla(document.getElementById('screen-minigame-select'));
+}
 
-  resultadoMinijuego.classList.add('hidden');
-  mostrarPantalla(screenMinijuego);
+function lanzarMinijuego(tipo) {
+  if (tipo === 'ppt') {
+    resultadoMinijuego.classList.add('hidden');
+    mostrarPantalla(screenMinijuego);
+  } else if (tipo === 'tormenta') {
+    mostrarPantalla(screenTormenta);
+    iniciarTormenta();
+  } else if (tipo === 'sniper') {
+    mostrarPantalla(screenSniper);
+    iniciarSniper();
+  } else if (tipo === 'tesoro') {
+    mostrarPantalla(screenTesoro);
+    iniciarTesoro();
+  }
 }
 
 function dormir() {
@@ -555,9 +568,7 @@ function detenerGameLoop() {
 ────────────────────────────────────────────── */
 
 function mostrarPantalla(pantalla) {
-  [screenAdopcion, screenPrincipal, screenMinijuego, screenGameOver].forEach(
-    (s) => s.classList.add('hidden')
-  );
+  document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
   pantalla.classList.remove('hidden');
 }
 
@@ -663,6 +674,345 @@ function aplicarDecayOffline() {
   verificarMuerte();
 }
 
+/* ══════════════════════════════════════════════
+   MINIJUEGO: ESQUIVA LA TORMENTA
+══════════════════════════════════════════════ */
+const TORMENTA_DURACION_MS         = 15000;
+const TORMENTA_VIDAS_INICIAL       = 3;
+const TORMENTA_INTERVALO_OBS_MS    = 1100;
+const TORMENTA_VELOCIDAD_PX        = 2.5;
+const TORMENTA_GANANCIA_HAMBRE     = 15;
+const TORMENTA_GANANCIA_FELICIDAD  = 20;
+const TORMENTA_GANANCIA_ENERGIA    = 10;
+const TORMENTA_PENALIZACION        = 8;
+
+const screenTormenta       = document.getElementById('screen-tormenta');
+const tormentaArea         = document.getElementById('tormenta-area');
+const tormentaBarco        = document.getElementById('tormenta-barco');
+const tormentaVidasEl      = document.getElementById('tormenta-vidas');
+const tormentaTimerEl      = document.getElementById('tormenta-timer');
+const tormentaResultado    = document.getElementById('tormenta-resultado');
+const tormentaResultadoTxt = document.getElementById('tormenta-resultado-texto');
+const btnTormentaBack      = document.getElementById('btn-tormenta-back');
+
+let tormentaVidas        = TORMENTA_VIDAS_INICIAL;
+let tormentaAnimId       = null;
+let tormentaTimerId      = null;
+let tormentaObsId        = null;
+let tormentaObstaculos   = [];
+let tormentaBarcoY       = 90;
+let tormentaSegundos     = TORMENTA_DURACION_MS / 1000;
+let tormentaActiva       = false;
+
+function iniciarTormenta() {
+  tormentaVidas      = TORMENTA_VIDAS_INICIAL;
+  tormentaObstaculos = [];
+  tormentaBarcoY     = 90;
+  tormentaSegundos   = TORMENTA_DURACION_MS / 1000;
+  tormentaActiva     = true;
+
+  tormentaArea.querySelectorAll('.tormenta-obstaculo').forEach(o => o.remove());
+  tormentaResultado.classList.add('hidden');
+  tormentaBarco.style.top = `${tormentaBarcoY}px`;
+  actualizarVidasTormenta();
+  actualizarTimerTormenta();
+
+  tormentaArea.addEventListener('mousemove', moverBarcoPorMouse);
+
+  tormentaObsId = setInterval(crearObstaculo, TORMENTA_INTERVALO_OBS_MS);
+  tormentaTimerId = setInterval(() => {
+    tormentaSegundos--;
+    actualizarTimerTormenta();
+    if (tormentaSegundos <= 0) terminarTormenta(true);
+  }, 1000);
+
+  tormentaAnimId = requestAnimationFrame(tickTormenta);
+}
+
+function moverBarcoPorMouse(evento) {
+  const rect = tormentaArea.getBoundingClientRect();
+  const yRelativa = evento.clientY - rect.top - 20;
+  tormentaBarcoY  = Math.max(0, Math.min(rect.height - 40, yRelativa));
+  tormentaBarco.style.top = `${tormentaBarcoY}px`;
+}
+
+function crearObstaculo() {
+  if (!tormentaActiva) return;
+  const emojis   = ['🌊', '🪨', '🌪️', '⚡'];
+  const emoji    = emojis[Math.floor(Math.random() * emojis.length)];
+  const alturaMax = tormentaArea.clientHeight - 40;
+  const yPos     = Math.floor(Math.random() * alturaMax);
+
+  const div = document.createElement('div');
+  div.className   = 'tormenta-obstaculo';
+  div.textContent = emoji;
+  div.style.left  = `${tormentaArea.clientWidth}px`;
+  div.style.top   = `${yPos}px`;
+  tormentaArea.appendChild(div);
+  tormentaObstaculos.push(div);
+}
+
+function tickTormenta() {
+  if (!tormentaActiva) return;
+
+  tormentaObstaculos = tormentaObstaculos.filter(obs => {
+    const xActual = parseFloat(obs.style.left);
+    const xNuevo  = xActual - TORMENTA_VELOCIDAD_PX;
+    obs.style.left = `${xNuevo}px`;
+
+    if (detectarColision(tormentaBarco, obs)) {
+      obs.remove();
+      registrarGolpeTormenta();
+      return false;
+    }
+    if (xNuevo < -50) { obs.remove(); return false; }
+    return true;
+  });
+
+  tormentaAnimId = requestAnimationFrame(tickTormenta);
+}
+
+function detectarColision(a, b) {
+  const ra = a.getBoundingClientRect();
+  const rb = b.getBoundingClientRect();
+  const margen = 10;
+  return !(ra.right  - margen < rb.left  + margen ||
+           ra.left   + margen > rb.right - margen ||
+           ra.bottom - margen < rb.top   + margen ||
+           ra.top    + margen > rb.bottom - margen);
+}
+
+function registrarGolpeTormenta() {
+  tormentaVidas--;
+  actualizarVidasTormenta();
+  tormentaBarco.style.filter = 'brightness(3)';
+  setTimeout(() => { tormentaBarco.style.filter = ''; }, 300);
+  if (tormentaVidas <= 0) terminarTormenta(false);
+}
+
+function actualizarVidasTormenta() {
+  const corazones = '❤️'.repeat(tormentaVidas) + '🖤'.repeat(TORMENTA_VIDAS_INICIAL - tormentaVidas);
+  tormentaVidasEl.textContent = corazones;
+}
+
+function actualizarTimerTormenta() {
+  tormentaTimerEl.textContent = `${tormentaSegundos}s`;
+}
+
+function terminarTormenta(gano) {
+  tormentaActiva = false;
+  cancelAnimationFrame(tormentaAnimId);
+  clearInterval(tormentaTimerId);
+  clearInterval(tormentaObsId);
+  tormentaArea.removeEventListener('mousemove', moverBarcoPorMouse);
+
+  if (gano) {
+    modificarStat('hambre',    TORMENTA_GANANCIA_HAMBRE);
+    modificarStat('felicidad', TORMENTA_GANANCIA_FELICIDAD);
+    modificarStat('energia',   TORMENTA_GANANCIA_ENERGIA);
+    tormentaResultadoTxt.textContent = '¡SOBREVIVISTE! 🏆 +Hambre +Felicidad +Energía';
+  } else {
+    modificarStat('felicidad', -TORMENTA_PENALIZACION);
+    tormentaResultadoTxt.textContent = '¡El mar te venció! 🌊 -Felicidad';
+  }
+  guardarEnStorage();
+  tormentaResultado.classList.remove('hidden');
+}
+
+/* ══════════════════════════════════════════════
+   MINIJUEGO: GOMU GOMU SNIPER
+══════════════════════════════════════════════ */
+const SNIPER_DISPAROS_TOTAL    = 3;
+const SNIPER_VELOCIDAD_MS      = 12;
+const SNIPER_PUNTOS_BUENO      = 10;
+const SNIPER_PUNTOS_BIEN       = 20;
+const SNIPER_PUNTOS_GOMU       = 50;
+const SNIPER_CONVERSION_STAT   = 0.3;
+
+const screenSniper         = document.getElementById('screen-sniper');
+const sniperAguja          = document.getElementById('sniper-aguja');
+const sniperPuntosEl       = document.getElementById('sniper-puntos');
+const sniperDisparosEl     = document.getElementById('sniper-disparos');
+const btnSniperDisparar    = document.getElementById('btn-sniper-disparar');
+const sniperResultado      = document.getElementById('sniper-resultado');
+const sniperResultadoTxt   = document.getElementById('sniper-resultado-texto');
+const btnSniperBack        = document.getElementById('btn-sniper-back');
+
+let sniperPosicion     = 0;
+let sniperDireccion    = 1;
+let sniperAnimId       = null;
+let sniperDisparos     = SNIPER_DISPAROS_TOTAL;
+let sniperPuntosTotales = 0;
+let sniperActiva       = false;
+
+function iniciarSniper() {
+  sniperPosicion      = 0;
+  sniperDireccion     = 1;
+  sniperDisparos      = SNIPER_DISPAROS_TOTAL;
+  sniperPuntosTotales = 0;
+  sniperActiva        = true;
+
+  sniperResultado.classList.add('hidden');
+  btnSniperDisparar.disabled = false;
+  actualizarInfoSniper();
+  animarAgujaSniper();
+}
+
+function animarAgujaSniper() {
+  sniperPosicion += sniperDireccion * 1.2;
+  if (sniperPosicion >= 100) { sniperPosicion = 100; sniperDireccion = -1; }
+  if (sniperPosicion <= 0)   { sniperPosicion = 0;   sniperDireccion =  1; }
+  sniperAguja.style.left = `${sniperPosicion}%`;
+  if (sniperActiva) sniperAnimId = setTimeout(animarAgujaSniper, SNIPER_VELOCIDAD_MS);
+}
+
+function dispararSniper() {
+  if (!sniperActiva || sniperDisparos <= 0) return;
+
+  const pos    = sniperPosicion;
+  let puntos   = 0;
+
+  // Zonas: miss 0-20%, bueno 20-45%, bien 45-75%, gomu 75-100%
+  if      (pos >= 75) puntos = SNIPER_PUNTOS_GOMU;
+  else if (pos >= 45) puntos = SNIPER_PUNTOS_BIEN;
+  else if (pos >= 20) puntos = SNIPER_PUNTOS_BUENO;
+
+  sniperPuntosTotales += puntos;
+  sniperDisparos--;
+  actualizarInfoSniper();
+
+  if (sniperDisparos <= 0) terminarSniper();
+}
+
+function actualizarInfoSniper() {
+  sniperPuntosEl.textContent   = `Puntos: ${sniperPuntosTotales}`;
+  sniperDisparosEl.textContent = `Disparos: ${'●'.repeat(sniperDisparos)}${'○'.repeat(SNIPER_DISPAROS_TOTAL - sniperDisparos)}`;
+}
+
+function terminarSniper() {
+  sniperActiva = false;
+  clearTimeout(sniperAnimId);
+  btnSniperDisparar.disabled = true;
+
+  const gananciaFelicidad = Math.round(sniperPuntosTotales * SNIPER_CONVERSION_STAT);
+  const gananciaEnergia   = Math.round(gananciaFelicidad / 2);
+
+  modificarStat('felicidad', gananciaFelicidad);
+  modificarStat('energia',   gananciaEnergia);
+  guardarEnStorage();
+
+  let emoji = sniperPuntosTotales >= 100 ? '🏆' : sniperPuntosTotales >= 50 ? '⭐' : '👊';
+  sniperResultadoTxt.textContent =
+    `${emoji} ${sniperPuntosTotales} puntos → +${gananciaFelicidad} Felicidad +${gananciaEnergia} Energía`;
+  sniperResultado.classList.remove('hidden');
+}
+
+/* ══════════════════════════════════════════════
+   MINIJUEGO: MAPA DEL TESORO
+══════════════════════════════════════════════ */
+const TESORO_FILAS             = 4;
+const TESORO_COLUMNAS          = 4;
+const TESORO_INTENTOS_MAX      = 5;
+const TESORO_GANANCIA_STATS    = 30;
+const TESORO_PENALIZACION      = 10;
+
+const screenTesoro         = document.getElementById('screen-tesoro');
+const teseroGrid           = document.getElementById('tesoro-grid');
+const tesoroPista          = document.getElementById('tesoro-pista');
+const teseroIntentosEl     = document.getElementById('tesoro-intentos');
+const teseroResultado      = document.getElementById('tesoro-resultado');
+const teseroResultadoTxt   = document.getElementById('tesoro-resultado-texto');
+const btnTesoroBack        = document.getElementById('btn-tesoro-back');
+
+let teseroPosTesoro   = 0;
+let teseroIntentos    = TESORO_INTENTOS_MAX;
+let teseroTerminado   = false;
+
+function iniciarTesoro() {
+  teseroPosTesoro = Math.floor(Math.random() * (TESORO_FILAS * TESORO_COLUMNAS));
+  teseroIntentos  = TESORO_INTENTOS_MAX;
+  teseroTerminado = false;
+
+  tesoroPista.textContent = '¡Encuentra la Fruta del Diablo! 🍎';
+  teseroResultado.classList.add('hidden');
+  actualizarIntentosTesoro();
+  renderizarGridTesoro();
+}
+
+function renderizarGridTesoro() {
+  teseroGrid.innerHTML = '';
+  const total = TESORO_FILAS * TESORO_COLUMNAS;
+  for (let i = 0; i < total; i++) {
+    const celda = document.createElement('button');
+    celda.className = 'tesoro-celda';
+    celda.textContent = '📦';
+    celda.setAttribute('aria-label', `Cofre ${i + 1}`);
+    celda.addEventListener('click', () => excavarTesoro(i, celda));
+    teseroGrid.appendChild(celda);
+  }
+}
+
+function excavarTesoro(indice, celda) {
+  if (teseroTerminado || celda.classList.contains('tesoro-celda--abierta')) return;
+
+  celda.classList.add('tesoro-celda--abierta');
+  teseroIntentos--;
+  actualizarIntentosTesoro();
+
+  if (indice === teseroPosTesoro) {
+    celda.textContent = '🍎';
+    celda.classList.add('tesoro-celda--ganadora');
+    terminarTesoro(true);
+    return;
+  }
+
+  celda.textContent = '💨';
+  const pista = calcularPistaTesoro(indice);
+  tesoroPista.textContent = pista;
+
+  if (teseroIntentos <= 0) terminarTesoro(false);
+}
+
+function calcularPistaTesoro(indice) {
+  const filaTesoro  = Math.floor(teseroPosTesoro / TESORO_COLUMNAS);
+  const colTesoro   = teseroPosTesoro % TESORO_COLUMNAS;
+  const filaActual  = Math.floor(indice / TESORO_COLUMNAS);
+  const colActual   = indice % TESORO_COLUMNAS;
+  const distancia   = Math.abs(filaTesoro - filaActual) + Math.abs(colTesoro - colActual);
+
+  if (distancia === 0) return '🍎 ¡LA FRUTA DEL DIABLO!';
+  if (distancia === 1) return '🔥 ¡ARDIENDO! ¡Muy cerca!';
+  if (distancia === 2) return '♨️ ¡Caliente!';
+  if (distancia === 3) return '🌡️ Tibio...';
+  if (distancia <= 5)  return '❄️ Frío';
+  return '🧊 ¡Congelado! Muy lejos';
+}
+
+function actualizarIntentosTesoro() {
+  teseroIntentosEl.textContent =
+    `Intentos: ${'●'.repeat(teseroIntentos)}${'○'.repeat(TESORO_INTENTOS_MAX - teseroIntentos)}`;
+}
+
+function terminarTesoro(gano) {
+  teseroTerminado = true;
+
+  if (gano) {
+    modificarStat('hambre',    TESORO_GANANCIA_STATS);
+    modificarStat('felicidad', TESORO_GANANCIA_STATS);
+    modificarStat('energia',   TESORO_GANANCIA_STATS);
+    teseroResultadoTxt.textContent = '¡ENCONTRASTE LA FRUTA! 🍎🏆 +Todo al máximo!';
+  } else {
+    modificarStat('felicidad', -TESORO_PENALIZACION);
+    const celdas = teseroGrid.querySelectorAll('.tesoro-celda');
+    celdas[teseroPosTesoro].textContent = '🍎';
+    celdas[teseroPosTesoro].classList.add('tesoro-celda--ganadora');
+    teseroResultadoTxt.textContent = '¡Se acabaron los intentos! 😢 -Felicidad';
+  }
+
+  guardarEnStorage();
+  teseroResultado.classList.remove('hidden');
+}
+
 /* ──────────────────────────────────────────────
    INICIALIZACIÓN — Event Listeners y arranque
 ────────────────────────────────────────────── */
@@ -675,14 +1025,54 @@ function registrarEventos() {
   btnDormir.addEventListener('click', dormir);
   btnReiniciar.addEventListener('click', reiniciarPartida);
 
+  // Selección de minijuego
+  const screenMinijuegoSelect = document.getElementById('screen-minigame-select');
+  document.querySelectorAll('.mg-select-btn').forEach(btn => {
+    btn.addEventListener('click', () => lanzarMinijuego(btn.dataset.game));
+  });
+  document.getElementById('btn-select-back').addEventListener('click', () => {
+    actualizarDOM();
+    mostrarPantalla(screenPrincipal);
+  });
+
+  // PPT
   botonesMinijuego.forEach((btn) => {
     btn.addEventListener('click', () => resolverMinijuego(btn.dataset.choice));
   });
-
   btnVolverMinijuego.addEventListener('click', () => {
     actualizarDOM();
     mostrarPantalla(screenPrincipal);
   });
+
+  // Tormenta
+  btnTormentaBack.addEventListener('click', () => {
+    terminarTormentaForzado();
+    actualizarDOM();
+    mostrarPantalla(screenPrincipal);
+  });
+
+  // Sniper
+  btnSniperDisparar.addEventListener('click', dispararSniper);
+  btnSniperBack.addEventListener('click', () => {
+    sniperActiva = false;
+    clearTimeout(sniperAnimId);
+    actualizarDOM();
+    mostrarPantalla(screenPrincipal);
+  });
+
+  // Tesoro
+  btnTesoroBack.addEventListener('click', () => {
+    actualizarDOM();
+    mostrarPantalla(screenPrincipal);
+  });
+}
+
+function terminarTormentaForzado() {
+  tormentaActiva = false;
+  cancelAnimationFrame(tormentaAnimId);
+  clearInterval(tormentaTimerId);
+  clearInterval(tormentaObsId);
+  tormentaArea.removeEventListener('mousemove', moverBarcoPorMouse);
 }
 
 function init() {
