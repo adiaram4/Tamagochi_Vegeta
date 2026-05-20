@@ -70,16 +70,17 @@ const FRASES = {
 
 // Partes comunes reutilizadas en cada sprite
 const SPRITE_HAT = `
-  <ellipse cx="50" cy="28" rx="48" ry="11" fill="#B8861A"/>
-  <path d="M16,27 Q14,4 50,4 Q86,4 84,27Z" fill="#DBA820"/>
-  <ellipse cx="50" cy="28" rx="48" ry="11" fill="none" stroke="#8B6010" stroke-width="1.5"/>
-  <rect x="12" y="24" width="76" height="8" rx="3" fill="#CC1111"/>
-  <rect x="12" y="24" width="76" height="3" rx="2" fill="#EE2222" opacity="0.5"/>`;
+  <ellipse cx="50" cy="31" rx="47" ry="11" fill="#B8861A"/>
+  <path d="M15,30 Q13,4 50,4 Q87,4 85,30Z" fill="#DBA820"/>
+  <ellipse cx="50" cy="31" rx="47" ry="11" fill="none" stroke="#8B6010" stroke-width="1.5"/>
+  <rect x="11" y="27" width="78" height="7" rx="3" fill="#CC1111"/>
+  <rect x="11" y="27" width="78" height="3" rx="2" fill="#EE2222" opacity="0.5"/>`;
 
+// Solo la parte del pelo visible POR DEBAJO del ala del sombrero
 const SPRITE_HAIR = `
-  <path d="M20,52 Q16,36 22,28 Q28,22 36,25" fill="#0D0D0D"/>
-  <path d="M80,52 Q84,36 78,28 Q72,22 64,25" fill="#0D0D0D"/>
-  <path d="M36,25 Q39,12 44,24 Q47,10 50,24 Q53,10 56,24 Q61,12 64,25 Q50,20 36,25Z" fill="#0D0D0D"/>`;
+  <path d="M18,52 Q10,43 12,33 Q17,25 26,28" fill="#0D0D0D"/>
+  <path d="M82,52 Q90,43 88,33 Q83,25 74,28" fill="#0D0D0D"/>
+  <path d="M24,42 Q37,36 50,39 Q63,36 76,42 Q63,47 50,46 Q37,47 24,42Z" fill="#0D0D0D"/>`;
 
 const SPRITE_FACE = `
   <ellipse cx="50" cy="72" rx="28" ry="30" fill="#F5B887"/>
@@ -108,8 +109,8 @@ const EYES_NORMAL = `
 
 function buildSprite(innerContent) {
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 135">
-    ${SPRITE_HAT}
     ${SPRITE_HAIR}
+    ${SPRITE_HAT}
     ${SPRITE_FACE}
     ${innerContent}
     ${SPRITE_BODY}
