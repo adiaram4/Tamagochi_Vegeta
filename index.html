@@ -89,9 +89,38 @@
     </section>
 
     <!-- ==============================
-         PANTALLA MINIJUEGO (Piedra, Papel, Tijeras)
+         SELECCIÓN DE MINIJUEGO
     ============================== -->
-    <section id="screen-minigame" class="screen hidden" aria-label="Minijuego">
+    <section id="screen-minigame-select" class="screen hidden" aria-label="Selección de minijuego">
+      <div class="screen-display">
+        <h2 class="minigame-title">¡ELIGE!</h2>
+        <p class="minigame-subtitle">¿Qué aventura quieres?</p>
+        <div class="mg-select-grid">
+          <button class="mg-select-btn" data-game="ppt">
+            <span class="mg-select-icon">✊</span>
+            <span class="mg-select-label">Batalla</span>
+          </button>
+          <button class="mg-select-btn" data-game="tormenta">
+            <span class="mg-select-icon">🌊</span>
+            <span class="mg-select-label">Tormenta</span>
+          </button>
+          <button class="mg-select-btn" data-game="sniper">
+            <span class="mg-select-icon">🎯</span>
+            <span class="mg-select-label">Sniper</span>
+          </button>
+          <button class="mg-select-btn" data-game="tesoro">
+            <span class="mg-select-icon">🗺️</span>
+            <span class="mg-select-label">Tesoro</span>
+          </button>
+        </div>
+        <button id="btn-select-back" class="console-btn btn-secondary">← Volver</button>
+      </div>
+    </section>
+
+    <!-- ==============================
+         MINIJUEGO: PIEDRA PAPEL TIJERAS
+    ============================== -->
+    <section id="screen-minigame" class="screen hidden" aria-label="Minijuego batalla">
       <div class="screen-display">
         <h2 class="minigame-title">¡BATALLA!</h2>
         <p class="minigame-subtitle">Elige tu ataque:</p>
@@ -102,7 +131,69 @@
         </div>
         <div id="minigame-result" class="minigame-result hidden" role="status" aria-live="polite">
           <p id="minigame-result-text"></p>
-          <button id="btn-minigame-back" class="console-btn btn-secondary">Volver</button>
+          <button id="btn-minigame-back" class="console-btn btn-secondary">← Volver</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==============================
+         MINIJUEGO: ESQUIVA LA TORMENTA
+    ============================== -->
+    <section id="screen-tormenta" class="screen hidden" aria-label="Minijuego esquiva la tormenta">
+      <div class="screen-display">
+        <div class="tormenta-hud">
+          <span id="tormenta-vidas" class="tormenta-vidas" aria-label="Vidas">❤️❤️❤️</span>
+          <span id="tormenta-timer" class="tormenta-timer" aria-live="polite">15s</span>
+        </div>
+        <div id="tormenta-area" class="tormenta-area" role="application" aria-label="Área de juego">
+          <div id="tormenta-barco" class="tormenta-barco" aria-hidden="true">⛵</div>
+        </div>
+        <p class="tormenta-instruccion">¡Mueve el ratón para esquivar!</p>
+        <div id="tormenta-resultado" class="minigame-result hidden" role="status" aria-live="polite">
+          <p id="tormenta-resultado-texto"></p>
+          <button id="btn-tormenta-back" class="console-btn btn-secondary">← Volver</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==============================
+         MINIJUEGO: GOMU GOMU SNIPER
+    ============================== -->
+    <section id="screen-sniper" class="screen hidden" aria-label="Minijuego Gomu Gomu Sniper">
+      <div class="screen-display">
+        <h2 class="minigame-title">🎯 SNIPER</h2>
+        <p class="minigame-subtitle">¡Para la aguja en la zona!</p>
+        <div class="sniper-container">
+          <div class="sniper-barra-wrap">
+            <div class="sniper-zona" id="sniper-zona-miss"   style="width:20%">MISS</div>
+            <div class="sniper-zona" id="sniper-zona-bueno"  style="width:25%">+10</div>
+            <div class="sniper-zona" id="sniper-zona-bien"   style="width:30%">+20</div>
+            <div class="sniper-zona" id="sniper-zona-gomu"   style="width:25%">GOMU!</div>
+          </div>
+          <div id="sniper-aguja" class="sniper-aguja" aria-hidden="true"></div>
+        </div>
+        <p id="sniper-puntos" class="sniper-puntos" aria-live="polite">Puntos: 0</p>
+        <p id="sniper-disparos" class="sniper-disparos" aria-live="polite">Disparos: ●●●</p>
+        <button id="btn-sniper-disparar" class="console-btn btn-primary">¡GOMU GOMU!</button>
+        <div id="sniper-resultado" class="minigame-result hidden" role="status" aria-live="polite">
+          <p id="sniper-resultado-texto"></p>
+          <button id="btn-sniper-back" class="console-btn btn-secondary">← Volver</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==============================
+         MINIJUEGO: MAPA DEL TESORO
+    ============================== -->
+    <section id="screen-tesoro" class="screen hidden" aria-label="Minijuego Mapa del Tesoro">
+      <div class="screen-display">
+        <h2 class="minigame-title">🗺️ TESORO</h2>
+        <p id="tesoro-pista" class="tesoro-pista" role="status" aria-live="polite">¡Encuentra la Fruta del Diablo!</p>
+        <div id="tesoro-grid" class="tesoro-grid" role="grid" aria-label="Mapa del tesoro"></div>
+        <p id="tesoro-intentos" class="tesoro-intentos" aria-live="polite">Intentos: ●●●●●</p>
+        <div id="tesoro-resultado" class="minigame-result hidden" role="status" aria-live="polite">
+          <p id="tesoro-resultado-texto"></p>
+          <button id="btn-tesoro-back" class="console-btn btn-secondary">← Volver</button>
         </div>
       </div>
     </section>
