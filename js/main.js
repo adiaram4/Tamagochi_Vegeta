@@ -39,12 +39,14 @@ const THRESHOLD_HAPPY     = 70;   // stat ≥ esto → contento
 const THRESHOLD_FULL      = 85;   // hambre ≥ esto → saciado
 
 // Temporización
-const LOOP_INTERVAL_MS    = 4000; // tick cada 4 segundos
-const BUBBLE_DURATION_MS  = 2500; // burbuja visible 2.5s
-const BUTTON_COOLDOWN_MS  = 1000; // evita spam de botones
+const LOOP_INTERVAL_MS       = 4000; // tick cada 4 segundos
+const BUBBLE_DURATION_MS     = 2500; // burbuja visible 2.5s
+const BUTTON_COOLDOWN_MS     = 1000; // evita spam de botones
+const MS_POR_TICK_OFFLINE    = LOOP_INTERVAL_MS; // equivalencia offline/online
 
 // Persistencia
-const STORAGE_KEY         = 'luffy_gotchi_save';
+const STORAGE_KEY            = 'luffy_gotchi_save';
+const STORAGE_KEY_TIMESTAMP  = 'luffy_gotchi_timestamp';
 
 /* ──────────────────────────────────────────────
    FRASES POR SITUACIÓN
@@ -565,10 +567,17 @@ function iniciarPartida() {
   iniciarGameLoop();
 }
 
+function calcularCausaMuerte() {
+  if (mascota.hambre <= STAT_MIN)    return 'murió de hambre... ¡sin carne! 🍖';
+  if (mascota.energia <= STAT_MIN)   return 'se quedó sin energía... ¡necesitaba dormir! 💤';
+  if (mascota.felicidad <= STAT_MIN) return 'perdió la ilusión de ser Rey Pirata... 💔';
+  return 'no pudo aguantar más...';
+}
+
 function mostrarGameOver() {
   actualizarSpriteDOM(spriteGameOver);
   mensajeGameOver.textContent =
-    `¡${mascota.nombre} se ha quedado sin fuerzas! Los sueños piratas se posponen...`;
+    `¡${mascota.nombre} ${calcularCausaMuerte()} Los sueños piratas se posponen...`;
   mostrarPantalla(screenGameOver);
 }
 
@@ -621,6 +630,7 @@ function reiniciarPartida() {
 
 function guardarEnStorage() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(mascota));
+  localStorage.setItem(STORAGE_KEY_TIMESTAMP, Date.now().toString());
 }
 
 function cargarDeStorage() {
@@ -629,10 +639,28 @@ function cargarDeStorage() {
 
   try {
     mascota = JSON.parse(datos);
+    aplicarDecayOffline();
     return true;
   } catch {
     return false;
   }
+}
+
+/** Calcula cuántos ticks pasaron mientras el juego estaba cerrado y aplica el decay */
+function aplicarDecayOffline() {
+  const timestampGuardado = parseInt(localStorage.getItem(STORAGE_KEY_TIMESTAMP), 10);
+  if (!timestampGuardado || !mascota.viva) return;
+
+  const msPasados    = Date.now() - timestampGuardado;
+  const ticksPasados = Math.floor(msPasados / MS_POR_TICK_OFFLINE);
+
+  if (ticksPasados <= 0) return;
+
+  mascota.hambre    = clamp(mascota.hambre    - DECAY_HUNGER    * ticksPasados, STAT_MIN, STAT_MAX);
+  mascota.energia   = clamp(mascota.energia   - DECAY_ENERGY    * ticksPasados, STAT_MIN, STAT_MAX);
+  mascota.felicidad = clamp(mascota.felicidad - DECAY_HAPPINESS * ticksPasados, STAT_MIN, STAT_MAX);
+
+  verificarMuerte();
 }
 
 /* ──────────────────────────────────────────────
