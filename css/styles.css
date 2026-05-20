@@ -6,44 +6,44 @@
    VARIABLES GLOBALES (cero magic numbers en CSS)
 ────────────────────────────────────────────── */
 :root {
-  /* Paleta Barco Pirata Nocturno */
-  --color-primary:        #CC1111;
-  --color-primary-dark:   #880A0A;
-  --color-primary-light:  #FF3333;
+  /* Paleta Nakama Rojo — One Piece clásico */
+  --color-primary:        #E01010;
+  --color-primary-dark:   #8B0000;
+  --color-primary-light:  #FF4444;
   --color-gold:           #FFD700;
   --color-gold-dark:      #C8A400;
   --color-straw-hat:      #DBA820;
   --color-skin:           #F5B887;
 
-  /* Consola — negro carbón */
-  --color-console-body:   #111111;
-  --color-console-trim:   #CC1111;
-  --color-screen-bg:      #0A0A0A;
-  --color-screen-border:  #CC1111;
-  --color-lcd-glow:       rgba(204, 17, 17, 0.12);
+  /* Consola — negro pirata con borde rojo */
+  --color-console-body:   #160606;
+  --color-console-trim:   #E01010;
+  --color-screen-bg:      #080000;
+  --color-screen-border:  #5A0A0A;
+  --color-lcd-glow:       rgba(200, 10, 10, 0.2);
 
   /* Texto */
-  --color-text-main:      #F0E6D0;
+  --color-text-main:      #FFE8E8;
   --color-text-accent:    var(--color-gold);
-  --color-text-dim:       #888877;
+  --color-text-dim:       #7A3A3A;
 
   /* Barras de stats */
-  --color-bar-hunger:     #FF5500;
+  --color-bar-hunger:     #FF6600;
   --color-bar-energy:     #FFD700;
-  --color-bar-happiness:  #00DD66;
-  --color-bar-bg:         #1A1A1A;
-  --color-bar-critical:   #FF0000;
+  --color-bar-happiness:  #00DD88;
+  --color-bar-bg:         #1A0000;
+  --color-bar-critical:   #FF2222;
 
   /* Botones */
   --color-btn-bg:         var(--color-primary);
   --color-btn-hover:      var(--color-primary-light);
   --color-btn-shadow:     var(--color-primary-dark);
-  --color-btn-secondary:  #2A1A1A;
-  --color-btn-secondary-hover: #441A1A;
+  --color-btn-secondary:  #200808;
+  --color-btn-secondary-hover: #350D0D;
 
-  /* Océano (usado en minijuegos) */
-  --color-ocean:          #1A1A2E;
-  --color-ocean-dark:     #0D0D1A;
+  /* Negro pirata (usado en minijuegos) */
+  --color-ocean:          #200808;
+  --color-ocean-dark:     #100404;
 
   /* Tipografía */
   --font-pixel:           'Press Start 2P', monospace;
@@ -84,10 +84,10 @@
 
 html, body {
   height: 100%;
-  background-color: #0A0A0A;
+  background-color: #0A0000;
   background-image:
-    radial-gradient(ellipse at 50% 0%,   rgba(204,17,17,0.2)  0%, transparent 60%),
-    radial-gradient(ellipse at 50% 100%, rgba(180,120,0,0.1)  0%, transparent 50%);
+    radial-gradient(ellipse at 50% 0%,   rgba(180,10,10,0.45) 0%, transparent 60%),
+    radial-gradient(ellipse at 50% 100%, rgba(255,215,0,0.06) 0%, transparent 50%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -118,15 +118,15 @@ html, body {
 ────────────────────────────────────────────── */
 .console-body {
   width: var(--console-width);
-  background: linear-gradient(170deg, #1A1A1A, #0D0D0D);
+  background: linear-gradient(170deg, #1E0808, #0A0202);
   border-radius: var(--console-radius);
-  border: 3px solid var(--color-primary);
+  border: 3px solid var(--color-console-trim);
   box-shadow:
-    0 0 0 1px rgba(255,255,255,0.03),
-    0 8px 40px rgba(0,0,0,0.95),
-    inset 0 1px 0 rgba(255,255,255,0.04),
-    0 0 40px rgba(204,17,17,0.3),
-    0 0 80px rgba(204,17,17,0.1);
+    0 0 0 1px rgba(255,255,255,0.04),
+    0 8px 40px rgba(0,0,0,0.9),
+    inset 0 1px 0 rgba(255,100,100,0.06),
+    0 0 40px rgba(220,10,10,0.3),
+    0 0 80px rgba(120,0,0,0.4);
   padding: var(--space-lg) var(--space-md) var(--space-md);
   position: relative;
   user-select: none;
@@ -151,10 +151,10 @@ html, body {
   left: 50%;
   transform: translateX(-50%);
   font-size: 0.28rem;
-  color: var(--color-primary);
+  color: var(--color-gold);
   letter-spacing: 2px;
   white-space: nowrap;
-  text-shadow: 0 0 8px rgba(204,17,17,0.5);
+  text-shadow: 0 0 8px rgba(255,215,0,0.5);
 }
 
 /* ──────────────────────────────────────────────
@@ -170,14 +170,14 @@ html, body {
 }
 
 .screen-display {
-  background: #080808;
+  background: #080000;
   border: 2px solid var(--color-primary);
   border-radius: var(--screen-radius);
   padding: var(--space-md) var(--space-sm);
   box-shadow:
     inset 0 2px 12px rgba(0,0,0,0.9),
-    inset 0 0 40px rgba(204,17,17,0.06),
-    0 0 20px rgba(204,17,17,0.15);
+    inset 0 0 40px rgba(200,10,10,0.07),
+    0 0 20px rgba(200,10,10,0.2);
   min-height: 460px;
   display: flex;
   flex-direction: column;
@@ -511,33 +511,33 @@ html, body {
 .btn-primary:active { box-shadow: 0 2px 0 var(--color-primary-dark); transform: translateY(2px); }
 
 .btn-action {
-  background: #1A0A0A;
+  background: #1A0404;
   color: var(--color-text-main);
   padding: var(--space-sm) var(--space-xs);
-  box-shadow: 0 4px 0 #000, 0 0 10px rgba(204,17,17,0.2);
-  border: 1px solid #441111;
+  box-shadow: 0 4px 0 #000, 0 0 10px rgba(220,10,10,0.15);
+  border: 1px solid #5A1010;
   flex: 1;
   min-width: 80px;
 }
 
 .btn-action:hover {
-  background: #2A0A0A;
+  background: #2A0808;
   border-color: var(--color-primary);
-  box-shadow: 0 4px 0 #000, 0 0 15px rgba(204,17,17,0.4);
+  box-shadow: 0 4px 0 #000, 0 0 15px rgba(220,10,10,0.4);
 }
 .btn-action:active { box-shadow: 0 2px 0 #000; transform: translateY(2px); }
 
 .btn-secondary {
-  background: #1A0A0A;
+  background: #200808;
   color: var(--color-text-dim);
   padding: var(--space-sm) var(--space-md);
   box-shadow: 0 4px 0 #000;
-  border: 1px solid #441111;
+  border: 1px solid #5A1010;
   width: 100%;
   margin-top: var(--space-sm);
 }
 
-.btn-secondary:hover { background: #2A0A0A; color: var(--color-text-main); }
+.btn-secondary:hover { background: #350D0D; color: var(--color-text-main); }
 
 /* ──────────────────────────────────────────────
    MINIJUEGO
@@ -572,11 +572,11 @@ html, body {
   padding: var(--space-md);
   cursor: pointer;
   transition: transform 0.15s ease, background 0.15s ease;
-  box-shadow: 0 4px 0 #0D1F3C;
+  box-shadow: 0 4px 0 #000;
 }
 
-.minigame-btn:hover  { background: #2A4A9A; transform: translateY(-2px); }
-.minigame-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #0D1F3C; }
+.minigame-btn:hover  { background: #2A0808; transform: translateY(-2px); }
+.minigame-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #000; }
 
 .minigame-result {
   text-align: center;
@@ -598,7 +598,7 @@ html, body {
   font-size: 0.9rem;
   color: var(--color-primary);
   text-align: center;
-  text-shadow: 2px 2px 0 var(--color-primary-dark), 0 0 20px rgba(204,17,17,0.5);
+  text-shadow: 2px 2px 0 var(--color-primary-dark), 0 0 20px rgba(220,10,10,0.6);
   animation: titleGlow var(--anim-pulse-duration) ease-in-out infinite alternate;
   margin-bottom: var(--space-sm);
 }
@@ -633,11 +633,11 @@ html, body {
   padding: var(--space-sm);
   cursor: pointer;
   transition: transform 0.15s, background 0.15s;
-  box-shadow: 0 4px 0 #0D1F3C;
+  box-shadow: 0 4px 0 #000;
 }
 
-.mg-select-btn:hover  { background: #2A4A9A; transform: translateY(-2px); }
-.mg-select-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #0D1F3C; }
+.mg-select-btn:hover  { background: #2A0808; transform: translateY(-2px); }
+.mg-select-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #000; }
 
 .mg-select-icon { font-size: 1.8rem; }
 .mg-select-label {
@@ -670,7 +670,7 @@ html, body {
 .tormenta-area {
   width: 100%;
   height: 180px;
-  background: linear-gradient(180deg, #0D2A5A 0%, #1A3A6E 50%, #0D4A3A 100%);
+  background: linear-gradient(180deg, #100202 0%, #200404 50%, #100202 100%);
   border: 2px solid var(--color-screen-border);
   border-radius: 8px;
   position: relative;
@@ -731,9 +731,9 @@ html, body {
   font-weight: bold;
 }
 
-#sniper-zona-miss  { background: #555566; }
-#sniper-zona-bueno { background: #1E6AB0; }
-#sniper-zona-bien  { background: #1A9A50; }
+#sniper-zona-miss  { background: #2A1010; }
+#sniper-zona-bueno { background: #5A1A00; }
+#sniper-zona-bien  { background: #1A6A00; }
 #sniper-zona-gomu  { background: var(--color-primary); }
 
 .sniper-aguja {
@@ -792,11 +792,11 @@ html, body {
   justify-content: center;
   cursor: pointer;
   transition: transform 0.1s, background 0.2s;
-  box-shadow: 0 3px 0 #0D1F3C;
+  box-shadow: 0 3px 0 #0A0602;
 }
 
 .tesoro-celda:hover:not(.tesoro-celda--abierta) {
-  background: #2A4A9A;
+  background: #2A0808;
   transform: translateY(-1px);
 }
 
@@ -807,8 +807,8 @@ html, body {
   transform: none;
 }
 
-.tesoro-celda--ganadora { background: rgba(255,215,0,0.3); border-color: var(--color-gold); }
-.tesoro-celda--trampa   { background: rgba(204,17,17,0.3); border-color: var(--color-primary); }
+.tesoro-celda--ganadora { background: rgba(255,215,0,0.25); border-color: var(--color-gold); }
+.tesoro-celda--trampa   { background: rgba(180,40,10,0.35); border-color: var(--color-primary); }
 
 .tesoro-intentos {
   font-size: 0.4rem;
