@@ -70,36 +70,41 @@ const FRASES = {
 
 // Partes comunes reutilizadas en cada sprite
 const SPRITE_HAT = `
-  <ellipse cx="50" cy="26" rx="46" ry="9" fill="#C8971E"/>
-  <path d="M18,26 Q16,6 50,6 Q84,6 82,26Z" fill="#DBA820"/>
-  <rect x="14" y="23" width="72" height="6" rx="2" fill="#CC1111"/>`;
+  <ellipse cx="50" cy="28" rx="48" ry="11" fill="#B8861A"/>
+  <path d="M16,27 Q14,4 50,4 Q86,4 84,27Z" fill="#DBA820"/>
+  <ellipse cx="50" cy="28" rx="48" ry="11" fill="none" stroke="#8B6010" stroke-width="1.5"/>
+  <rect x="12" y="24" width="76" height="8" rx="3" fill="#CC1111"/>
+  <rect x="12" y="24" width="76" height="3" rx="2" fill="#EE2222" opacity="0.5"/>`;
 
 const SPRITE_HAIR = `
-  <path d="M22,50 Q18,36 24,30 Q30,26 38,28" fill="#111111"/>
-  <path d="M78,50 Q82,36 76,30 Q70,26 62,28" fill="#111111"/>
-  <path d="M38,28 Q41,17 46,26 Q48,13 50,26 Q52,13 54,26 Q59,17 62,28 Q50,23 38,28Z" fill="#111111"/>`;
+  <path d="M20,52 Q16,36 22,28 Q28,22 36,25" fill="#0D0D0D"/>
+  <path d="M80,52 Q84,36 78,28 Q72,22 64,25" fill="#0D0D0D"/>
+  <path d="M36,25 Q39,12 44,24 Q47,10 50,24 Q53,10 56,24 Q61,12 64,25 Q50,20 36,25Z" fill="#0D0D0D"/>`;
 
 const SPRITE_FACE = `
-  <ellipse cx="50" cy="73" rx="27" ry="28" fill="#F5B887"/>
-  <ellipse cx="24" cy="72" rx="4" ry="6"  fill="#F5B887"/>
-  <ellipse cx="76" cy="72" rx="4" ry="6"  fill="#F5B887"/>`;
+  <ellipse cx="50" cy="72" rx="28" ry="30" fill="#F5B887"/>
+  <ellipse cx="23" cy="71" rx="5" ry="7" fill="#F5B887"/>
+  <ellipse cx="77" cy="71" rx="5" ry="7" fill="#F5B887"/>
+  <ellipse cx="23" cy="71" rx="3" ry="5" fill="#F0A878" opacity="0.4"/>
+  <ellipse cx="77" cy="71" rx="3" ry="5" fill="#F0A878" opacity="0.4"/>`;
 
 const SPRITE_SCAR = `
-  <line x1="34" y1="76" x2="38" y2="80" stroke="#E55555" stroke-width="2.5" stroke-linecap="round"/>
-  <line x1="38" y1="76" x2="34" y2="80" stroke="#E55555" stroke-width="2.5" stroke-linecap="round"/>`;
+  <line x1="33" y1="76" x2="38" y2="82" stroke="#CC3333" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="38" y1="76" x2="33" y2="82" stroke="#CC3333" stroke-width="2.5" stroke-linecap="round"/>`;
 
 const SPRITE_BODY = `
-  <path d="M29,101 L24,130 L76,130 L71,101 Q60,95 50,97 Q40,95 29,101Z" fill="#CC1111"/>
-  <path d="M43,101 Q50,97 57,101 L55,130 L45,130Z" fill="#1a1a1a"/>`;
+  <path d="M27,102 L21,132 L79,132 L73,102 Q61,94 50,97 Q39,94 27,102Z" fill="#CC1111"/>
+  <path d="M42,102 Q50,97 58,102 L56,132 L44,132Z" fill="#111"/>
+  <ellipse cx="30" cy="108" rx="4" ry="3" fill="#AA0E0E" opacity="0.6"/>
+  <ellipse cx="70" cy="108" rx="4" ry="3" fill="#AA0E0E" opacity="0.6"/>`;
 
-// Ojos estándar (abiertos, contentos)
 const EYES_NORMAL = `
-  <circle cx="38" cy="67" r="7"   fill="white"/>
-  <circle cx="62" cy="67" r="7"   fill="white"/>
-  <circle cx="39" cy="68" r="4.5" fill="#111"/>
-  <circle cx="63" cy="68" r="4.5" fill="#111"/>
-  <circle cx="40" cy="66" r="1.5" fill="white"/>
-  <circle cx="64" cy="66" r="1.5" fill="white"/>`;
+  <circle cx="37" cy="66" r="8"   fill="white"/>
+  <circle cx="63" cy="66" r="8"   fill="white"/>
+  <circle cx="38" cy="67" r="5"   fill="#111"/>
+  <circle cx="64" cy="67" r="5"   fill="#111"/>
+  <circle cx="36" cy="64" r="2"   fill="white"/>
+  <circle cx="62" cy="64" r="2"   fill="white"/>`;
 
 function buildSprite(innerContent) {
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 135">
@@ -111,102 +116,102 @@ function buildSprite(innerContent) {
   </svg>`;
 }
 
-/* Expresión: IDLE — sonrisa tranquila */
+/* Expresión: IDLE — sonrisa confiada de Luffy */
 function generarSpriteIdle() {
   return buildSprite(`
     ${EYES_NORMAL}
     ${SPRITE_SCAR}
-    <path d="M31,83 Q50,100 69,83" fill="#B80000" stroke="#111" stroke-width="1.5"/>
-    <path d="M37,83 L37,88 Q50,93 63,88 L63,83" fill="white"/>
+    <path d="M30,84 Q50,102 70,84" fill="#AA0000" stroke="#111" stroke-width="1.5"/>
+    <path d="M36,84 L36,90 Q50,96 64,90 L64,84" fill="white"/>
+    <line x1="36" y1="87" x2="44" y2="87" stroke="#DDD" stroke-width="1"/>
+    <line x1="46" y1="87" x2="54" y2="87" stroke="#DDD" stroke-width="1"/>
+    <line x1="56" y1="87" x2="64" y2="87" stroke="#DDD" stroke-width="1"/>
   `);
 }
 
-/* Expresión: HUNGRY — triste con lágrimas */
+/* Expresión: HUNGRY — llorando pidiendo carne */
 function generarSpriteHungry() {
   return buildSprite(`
-    <circle cx="38" cy="67" r="7"   fill="white"/>
-    <circle cx="62" cy="67" r="7"   fill="white"/>
-    <ellipse cx="38" cy="69" rx="4.5" ry="3.5" fill="#111"/>
-    <ellipse cx="62" cy="69" rx="4.5" ry="3.5" fill="#111"/>
+    <circle cx="37" cy="66" r="8" fill="white"/>
+    <circle cx="63" cy="66" r="8" fill="white"/>
+    <ellipse cx="37" cy="68" rx="5" ry="4" fill="#111"/>
+    <ellipse cx="63" cy="68" rx="5" ry="4" fill="#111"/>
     ${SPRITE_SCAR}
-    <!-- Lágrimas -->
-    <ellipse cx="32" cy="76" rx="2.5" ry="4" fill="#88CCFF" opacity="0.9"/>
-    <ellipse cx="68" cy="76" rx="2.5" ry="4" fill="#88CCFF" opacity="0.9"/>
-    <!-- Boca triste -->
-    <path d="M33,88 Q50,80 67,88" stroke="#111" stroke-width="2" fill="none" stroke-linecap="round"/>
-    <!-- Texto hambre -->
-    <text x="50" y="110" text-anchor="middle" font-size="5" fill="#FF6B35" font-family="sans-serif">¡CARNE!</text>
+    <path d="M31,76 Q33,84 30,90" stroke="#55AAFF" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M69,76 Q67,84 70,90" stroke="#55AAFF" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <ellipse cx="30" cy="91" rx="3" ry="4" fill="#55AAFF" opacity="0.8"/>
+    <ellipse cx="70" cy="91" rx="3" ry="4" fill="#55AAFF" opacity="0.8"/>
+    <path d="M35,88 Q50,80 65,88" stroke="#111" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <text x="50" y="116" text-anchor="middle" font-size="5.5" fill="#FF6600" font-family="sans-serif" font-weight="bold">¡CARNE!</text>
   `);
 }
 
-/* Expresión: FULL — megacontento tras comer */
+/* Expresión: FULL — eufórico con estrellas en los ojos */
 function generarSpriteFull() {
   return buildSprite(`
-    <!-- Ojos estrella / felices -->
-    <circle cx="38" cy="67" r="7"   fill="white"/>
-    <circle cx="62" cy="67" r="7"   fill="white"/>
-    <!-- Estrellas en los ojos -->
-    <text x="38" y="71" text-anchor="middle" font-size="9" fill="#FFD700">★</text>
-    <text x="62" y="71" text-anchor="middle" font-size="9" fill="#FFD700">★</text>
+    <circle cx="37" cy="66" r="8" fill="white"/>
+    <circle cx="63" cy="66" r="8" fill="white"/>
+    <text x="37" y="70" text-anchor="middle" font-size="11" fill="#FFD700">★</text>
+    <text x="63" y="70" text-anchor="middle" font-size="11" fill="#FFD700">★</text>
     ${SPRITE_SCAR}
-    <!-- Sonrisa enorme -->
-    <path d="M26,82 Q50,106 74,82" fill="#B80000" stroke="#111" stroke-width="1.5"/>
-    <path d="M32,82 L32,90 Q50,97 68,90 L68,82" fill="white"/>
-    <!-- Rubor en mejillas -->
-    <ellipse cx="22" cy="78" rx="6" ry="4" fill="#FF9999" opacity="0.5"/>
-    <ellipse cx="78" cy="78" rx="6" ry="4" fill="#FF9999" opacity="0.5"/>
+    <path d="M24,83 Q50,110 76,83" fill="#AA0000" stroke="#111" stroke-width="1.5"/>
+    <path d="M30,83 L30,93 Q50,100 70,93 L70,83" fill="white"/>
+    <ellipse cx="21" cy="78" rx="7" ry="5" fill="#FF8888" opacity="0.55"/>
+    <ellipse cx="79" cy="78" rx="7" ry="5" fill="#FF8888" opacity="0.55"/>
+    <text x="10" y="55" font-size="8">✨</text>
+    <text x="80" y="50" font-size="8">✨</text>
   `);
 }
 
-/* Expresión: TIRED — cansado, dormido */
+/* Expresión: TIRED — dormido con ZZZ */
 function generarSpriteTired() {
   return buildSprite(`
-    <!-- Ojos cerrados curva -->
-    <path d="M31,67 Q38,60 45,67" stroke="#111" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-    <path d="M55,67 Q62,60 69,67" stroke="#111" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-    <!-- Boca entreabierta -->
-    <ellipse cx="50" cy="86" rx="8" ry="5" fill="#B80000"/>
-    <ellipse cx="50" cy="85" rx="7" ry="3" fill="#FF9999"/>
-    <!-- ZZZ -->
-    <text x="74" y="52" font-size="7" fill="#88AAFF" font-family="sans-serif" font-weight="bold">z</text>
-    <text x="80" y="44" font-size="9" fill="#88AAFF" font-family="sans-serif" font-weight="bold">z</text>
-    <text x="87" y="35" font-size="11" fill="#88AAFF" font-family="sans-serif" font-weight="bold">Z</text>
+    <path d="M29,66 Q37,57 45,66" stroke="#111" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M55,66 Q63,57 71,66" stroke="#111" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M29,66 Q37,74 45,66" stroke="#111" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.3"/>
+    <path d="M55,66 Q63,74 71,66" stroke="#111" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.3"/>
+    <ellipse cx="50" cy="87" rx="9" ry="6" fill="#AA0000"/>
+    <ellipse cx="50" cy="86" rx="8" ry="4" fill="#FFAAAA"/>
+    <text x="72" y="56" font-size="8"  fill="#AABBFF" font-family="sans-serif" font-weight="bold">z</text>
+    <text x="79" y="46" font-size="10" fill="#AABBFF" font-family="sans-serif" font-weight="bold">z</text>
+    <text x="87" y="34" font-size="13" fill="#AABBFF" font-family="sans-serif" font-weight="bold">Z</text>
   `);
 }
 
-/* Expresión: HAPPY — carcajada */
+/* Expresión: HAPPY — carcajada con ojos en U */
 function generarSpriteHappy() {
   return buildSprite(`
-    <!-- Ojos cerrados riendo -->
-    <path d="M31,66 Q38,72 45,66" stroke="#111" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-    <path d="M55,66 Q62,72 69,66" stroke="#111" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <path d="M29,65 Q37,75 45,65" stroke="#111" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M55,65 Q63,75 71,65" stroke="#111" stroke-width="3" fill="none" stroke-linecap="round"/>
     ${SPRITE_SCAR}
-    <!-- Boca abierta riendo -->
-    <path d="M26,80 Q50,105 74,80" fill="#B80000" stroke="#111" stroke-width="1.5"/>
-    <path d="M32,80 L32,90 Q50,97 68,90 L68,80" fill="white"/>
-    <!-- Líneas de energía -->
-    <line x1="15" y1="55" x2="22" y2="60" stroke="#FFD700" stroke-width="2" stroke-linecap="round"/>
-    <line x1="12" y1="65" x2="20" y2="67" stroke="#FFD700" stroke-width="2" stroke-linecap="round"/>
-    <line x1="85" y1="55" x2="78" y2="60" stroke="#FFD700" stroke-width="2" stroke-linecap="round"/>
-    <line x1="88" y1="65" x2="80" y2="67" stroke="#FFD700" stroke-width="2" stroke-linecap="round"/>
+    <path d="M24,82 Q50,110 76,82" fill="#AA0000" stroke="#111" stroke-width="1.5"/>
+    <path d="M30,82 L30,93 Q50,100 70,93 L70,82" fill="white"/>
+    <line x1="30" y1="88" x2="40" y2="88" stroke="#DDD" stroke-width="1"/>
+    <line x1="42" y1="88" x2="58" y2="88" stroke="#DDD" stroke-width="1"/>
+    <line x1="60" y1="88" x2="70" y2="88" stroke="#DDD" stroke-width="1"/>
+    <line x1="13" y1="54" x2="21" y2="60" stroke="#FFD700" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="10" y1="65" x2="19" y2="67" stroke="#FFD700" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="87" y1="54" x2="79" y2="60" stroke="#FFD700" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="90" y1="65" x2="81" y2="67" stroke="#FFD700" stroke-width="2.5" stroke-linecap="round"/>
   `);
 }
 
-/* Expresión: DEAD — KO, ojos en espiral */
+/* Expresión: DEAD — ojos en espiral, KO */
 function generarSpriteDead() {
   return buildSprite(`
-    <!-- Ojos en espiral (KO) -->
-    <circle cx="38" cy="67" r="7" fill="white"/>
-    <circle cx="62" cy="67" r="7" fill="white"/>
-    <path d="M38,67 m-4,0 a4,4 0 1,0 8,0 a2,2 0 1,1 -4,0" stroke="#111" stroke-width="1.5" fill="none"/>
-    <path d="M62,67 m-4,0 a4,4 0 1,0 8,0 a2,2 0 1,1 -4,0" stroke="#111" stroke-width="1.5" fill="none"/>
-    <!-- Boca triste -->
-    <path d="M35,88 Q50,82 65,88" stroke="#111" stroke-width="2" fill="none" stroke-linecap="round"/>
-    <!-- Estrellas KO alrededor -->
-    <text x="18" y="50" font-size="10" opacity="0.8">⭐</text>
-    <text x="72" y="45" font-size="10" opacity="0.8">⭐</text>
-    <text x="12" y="75" font-size="8"  opacity="0.6">✦</text>
-    <text x="80" y="70" font-size="8"  opacity="0.6">✦</text>
+    <circle cx="37" cy="66" r="8" fill="white"/>
+    <circle cx="63" cy="66" r="8" fill="white"/>
+    <circle cx="37" cy="66" r="6" fill="none" stroke="#333" stroke-width="1.5"/>
+    <circle cx="37" cy="66" r="3.5" fill="none" stroke="#333" stroke-width="1.5"/>
+    <circle cx="37" cy="66" r="1.5" fill="#333"/>
+    <circle cx="63" cy="66" r="6" fill="none" stroke="#333" stroke-width="1.5"/>
+    <circle cx="63" cy="66" r="3.5" fill="none" stroke="#333" stroke-width="1.5"/>
+    <circle cx="63" cy="66" r="1.5" fill="#333"/>
+    <path d="M36,88 Q50,82 64,88" stroke="#111" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <text x="12" y="50" font-size="11" opacity="0.9">💫</text>
+    <text x="74" y="46" font-size="11" opacity="0.9">💫</text>
+    <text x="8"  y="72" font-size="9"  opacity="0.7">⭐</text>
+    <text x="80" y="68" font-size="9"  opacity="0.7">⭐</text>
   `);
 }
 

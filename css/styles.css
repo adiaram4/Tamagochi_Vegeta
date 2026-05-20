@@ -6,42 +6,44 @@
    VARIABLES GLOBALES (cero magic numbers en CSS)
 ────────────────────────────────────────────── */
 :root {
-  /* Paleta One Piece */
+  /* Paleta Barco Pirata Nocturno */
   --color-primary:        #CC1111;
-  --color-primary-dark:   #990D0D;
-  --color-primary-light:  #FF4444;
-  --color-straw-hat:      #DBA820;
-  --color-straw-dark:     #C8971E;
-  --color-ocean:          #1A3A6E;
-  --color-ocean-dark:     #0D1F3C;
+  --color-primary-dark:   #880A0A;
+  --color-primary-light:  #FF3333;
   --color-gold:           #FFD700;
+  --color-gold-dark:      #C8A400;
+  --color-straw-hat:      #DBA820;
   --color-skin:           #F5B887;
 
-  /* Consola */
-  --color-console-body:   #1C1C2E;
-  --color-console-trim:   #2A2A40;
-  --color-screen-bg:      #0A1628;
-  --color-screen-border:  #1E3A6E;
-  --color-lcd-glow:       rgba(30, 90, 200, 0.15);
+  /* Consola — negro carbón */
+  --color-console-body:   #111111;
+  --color-console-trim:   #CC1111;
+  --color-screen-bg:      #0A0A0A;
+  --color-screen-border:  #CC1111;
+  --color-lcd-glow:       rgba(204, 17, 17, 0.12);
 
   /* Texto */
-  --color-text-main:      #E8E0D0;
+  --color-text-main:      #F0E6D0;
   --color-text-accent:    var(--color-gold);
-  --color-text-dim:       #7A7A9A;
+  --color-text-dim:       #888877;
 
   /* Barras de stats */
-  --color-bar-hunger:     #FF6B35;
+  --color-bar-hunger:     #FF5500;
   --color-bar-energy:     #FFD700;
-  --color-bar-happiness:  #44DD88;
-  --color-bar-bg:         #1A1A2E;
-  --color-bar-critical:   #FF2222;
+  --color-bar-happiness:  #00DD66;
+  --color-bar-bg:         #1A1A1A;
+  --color-bar-critical:   #FF0000;
 
   /* Botones */
   --color-btn-bg:         var(--color-primary);
   --color-btn-hover:      var(--color-primary-light);
   --color-btn-shadow:     var(--color-primary-dark);
-  --color-btn-secondary:  #2A4A9A;
-  --color-btn-secondary-hover: #3A5ABA;
+  --color-btn-secondary:  #2A1A1A;
+  --color-btn-secondary-hover: #441A1A;
+
+  /* Océano (usado en minijuegos) */
+  --color-ocean:          #1A1A2E;
+  --color-ocean-dark:     #0D0D1A;
 
   /* Tipografía */
   --font-pixel:           'Press Start 2P', monospace;
@@ -82,10 +84,10 @@
 
 html, body {
   height: 100%;
-  background-color: var(--color-ocean-dark);
+  background-color: #0A0A0A;
   background-image:
-    radial-gradient(ellipse at 20% 50%, rgba(30,58,110,0.4) 0%, transparent 60%),
-    radial-gradient(ellipse at 80% 20%, rgba(204,17,17,0.15) 0%, transparent 50%);
+    radial-gradient(ellipse at 50% 0%,   rgba(204,17,17,0.2)  0%, transparent 60%),
+    radial-gradient(ellipse at 50% 100%, rgba(180,120,0,0.1)  0%, transparent 50%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -116,14 +118,15 @@ html, body {
 ────────────────────────────────────────────── */
 .console-body {
   width: var(--console-width);
-  background: linear-gradient(160deg, var(--color-console-body), #141428);
+  background: linear-gradient(170deg, #1A1A1A, #0D0D0D);
   border-radius: var(--console-radius);
-  border: 3px solid var(--color-console-trim);
+  border: 3px solid var(--color-primary);
   box-shadow:
-    0 0 0 1px rgba(255,255,255,0.04),
-    0 8px 32px rgba(0,0,0,0.8),
-    inset 0 1px 0 rgba(255,255,255,0.06),
-    0 0 60px rgba(204,17,17,0.15);
+    0 0 0 1px rgba(255,255,255,0.03),
+    0 8px 40px rgba(0,0,0,0.95),
+    inset 0 1px 0 rgba(255,255,255,0.04),
+    0 0 40px rgba(204,17,17,0.3),
+    0 0 80px rgba(204,17,17,0.1);
   padding: var(--space-lg) var(--space-md) var(--space-md);
   position: relative;
   user-select: none;
@@ -142,15 +145,16 @@ html, body {
 }
 
 .console-body::after {
-  content: '🏴‍☠️ ONE PIECE';
+  content: '🏴‍☠️ ONE PIECE — KING OF PIRATES';
   position: absolute;
   bottom: var(--space-sm);
   left: 50%;
   transform: translateX(-50%);
-  font-size: 0.3rem;
-  color: var(--color-text-dim);
+  font-size: 0.28rem;
+  color: var(--color-primary);
   letter-spacing: 2px;
   white-space: nowrap;
+  text-shadow: 0 0 8px rgba(204,17,17,0.5);
 }
 
 /* ──────────────────────────────────────────────
@@ -166,14 +170,14 @@ html, body {
 }
 
 .screen-display {
-  background: var(--color-screen-bg);
-  border: 2px solid var(--color-screen-border);
+  background: #080808;
+  border: 2px solid var(--color-primary);
   border-radius: var(--screen-radius);
   padding: var(--space-md) var(--space-sm);
   box-shadow:
-    inset 0 2px 8px rgba(0,0,0,0.6),
-    inset 0 0 30px var(--color-lcd-glow),
-    0 0 20px rgba(30,90,200,0.2);
+    inset 0 2px 12px rgba(0,0,0,0.9),
+    inset 0 0 40px rgba(204,17,17,0.06),
+    0 0 20px rgba(204,17,17,0.15);
   min-height: 460px;
   display: flex;
   flex-direction: column;
@@ -507,27 +511,33 @@ html, body {
 .btn-primary:active { box-shadow: 0 2px 0 var(--color-primary-dark); transform: translateY(2px); }
 
 .btn-action {
-  background: var(--color-ocean);
+  background: #1A0A0A;
   color: var(--color-text-main);
   padding: var(--space-sm) var(--space-xs);
-  box-shadow: 0 4px 0 #0D1F3C;
+  box-shadow: 0 4px 0 #000, 0 0 10px rgba(204,17,17,0.2);
+  border: 1px solid #441111;
   flex: 1;
   min-width: 80px;
 }
 
-.btn-action:hover { background: #2A4A9A; }
-.btn-action:active { box-shadow: 0 2px 0 #0D1F3C; transform: translateY(2px); }
+.btn-action:hover {
+  background: #2A0A0A;
+  border-color: var(--color-primary);
+  box-shadow: 0 4px 0 #000, 0 0 15px rgba(204,17,17,0.4);
+}
+.btn-action:active { box-shadow: 0 2px 0 #000; transform: translateY(2px); }
 
 .btn-secondary {
-  background: var(--color-btn-secondary);
-  color: white;
+  background: #1A0A0A;
+  color: var(--color-text-dim);
   padding: var(--space-sm) var(--space-md);
-  box-shadow: 0 4px 0 #0D1F3C;
+  box-shadow: 0 4px 0 #000;
+  border: 1px solid #441111;
   width: 100%;
   margin-top: var(--space-sm);
 }
 
-.btn-secondary:hover { background: var(--color-btn-secondary-hover); }
+.btn-secondary:hover { background: #2A0A0A; color: var(--color-text-main); }
 
 /* ──────────────────────────────────────────────
    MINIJUEGO
