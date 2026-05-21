@@ -1,12 +1,12 @@
 # Luffy-gotchi 🏴‍☠️
 
-Tamagotchi temático de **Luffy (One Piece)** desarrollado como proyecto final del módulo de Desarrollo de Aplicaciones Web/Multiplataforma.
+Tamagotchi temático de **Luffy (One Piece)** desarrollado como proyecto final del módulo de Desarrollo de Aplicaciones Web.
 
 ## Tecnologías
 
 - HTML5 semántico
 - CSS3 (variables, animaciones, diseño retro pixel-art)
-- Vanilla JavaScript (ES6+, sin frameworks ni librerías)
+- Vanilla JavaScript
 
 ## Cómo jugar
 
